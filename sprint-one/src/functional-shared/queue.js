@@ -5,5 +5,8 @@ var Queue = function(){
 
 var queueMethods = {};
 
+//extend Queue to contain the QueueMethods object
+//use this to refer to the specific instance of Queue's propertys
+
 
 
