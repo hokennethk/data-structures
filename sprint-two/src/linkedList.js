@@ -50,6 +50,14 @@ var LinkedList = function(){
     return false;
   };
   
+  list.each = function (callback){
+    var current = list.head;
+    while (current !== null){
+      callback(current)
+      current = current.next;
+    }
+  };
+
   return list;
 };
 

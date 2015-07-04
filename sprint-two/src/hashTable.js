@@ -4,59 +4,75 @@ var HashTable = function(){
 };
 
 HashTable.prototype.insert = function(k, v) {
-    var i = getIndexBelowMaxForKey(k, this._limit);
-    // if hash table at i is empty:
-    // insert into hash table an object { k: v, next: null }
-    // otherwise insert new node into 'linked list'
-    var obj = {};
-        obj[k] = v;
-        obj.next = null;
-    if (this._storage.get(i)) {
-		var current = this._storage.get(i);
-		console.dir(current);
-		while (current.next !== null) {
-			current = current.next;
-		}
-		current.next = obj;
-    } else {
-        this._storage.set(i, obj);
+  var i = getIndexBelowMaxForKey(k, this._limit);
+  var linkedList;
+  // check to see if anything exists at storage location
+  if (this._storage.get(i)) {
+    // iterate through linked list to check
+      // if (k, v) exists, overwrite it
+      // otherwise add to tail
+    var found = false;  
+    linkedList = this._storage.get(i);
+    // checking for existing keys, overwrite if necessary
+    linkedList.each(function(node) {
+      if (node.value[0] === k) {
+        node.value[1] = v;
+        found = true;
+      } 
+    });  
+    if (!found) {
+      linkedList.addToTail([k,v]);
     }
-
+  } else {
+    linkedList = LinkedList();
+    linkedList.addToTail([k,v]);
+    this._storage.set(i, linkedList);
+  }
 };
 
 HashTable.prototype.retrieve = function(k) {
-    var i = getIndexBelowMaxForKey(k, this._limit);
-    // this._storage.get(k)
-    // storage[i] should return an object that contains objects aka a linkedlist
-    // we are looking to return the specific object in question
-    // we'll look at this._storage.get(i)
-    // if (this._storage.get(i).hasOwnProperty(k)) 
-    // return value
-    //else 
-    //while this._storage.get(i).next != null
-    // check this._storage.get(i).next... 
-
-    if (this._storage.get(i)) {
-        if (this._storage.get(i).hasOwnProperty(k)) {
-            return this._storage.get(i)[k];
-        } else {
-            var current = this._storage.get(i).next;
-            while (current !== null) {
-                if (current.hasOwnProperty(k)) {
-                    return current[k];
-                } else {
-                    current = current.next;
-                }
-            }
-            return false;
-        }
-    }
+  var i = getIndexBelowMaxForKey(k, this._limit);
+  var linkedList = this._storage.get(i);
+  var value = null;
+  if (linkedList){
+    linkedList.each(function(node){
+      if (node.value[0] === k){
+        value = node.value[1];
+      }
+    });
+  }
+  return value;
 };
 
 HashTable.prototype.remove = function(k){
-	
+  var i = getIndexBelowMaxForKey(k, this._limit);
+  var linkedList = this._storage.get(i);
+  var parent;
+  var current = parent;
+  if (linkedList){  
+    if (linkedList.head.value[0] === k){
+        // we are removing the head
+        linkedList.removeHead();
+    } else {
+      //we must search the linked list for the node to remove
+
+      linkedList.each(function(node){
+        current = node;
+        if (current.next && current.next.value[0] === k){
+          current.next = current.next.next;
+        }
+      });
+    }
+  }
 };
 
+
+/*
+  {
+    value: [key,value],
+    next: null
+  }
+*/
 
 
 /*
