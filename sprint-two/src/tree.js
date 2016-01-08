@@ -41,16 +41,5 @@ treeMethods.contains = function(target){
 
 	containsTarget(self);
 	return contained;
-};
-
-
-/*
- * Complexity: What is the time complexity of the above functions?
- 	addchild - O(1)
-
- 	contains - O(n^2)
- */
-
-
-			
+};			
 			

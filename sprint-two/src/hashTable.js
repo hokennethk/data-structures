@@ -65,16 +65,3 @@ HashTable.prototype.remove = function(k){
     }
   }
 };
-
-
-/*
-  {
-    value: [key,value],
-    next: null
-  }
-*/
-
-
-/*
- * Complexity: What is the time complexity of the above functions?
- */
